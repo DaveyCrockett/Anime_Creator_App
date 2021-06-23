@@ -1,0 +1,18 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="SuperProject.objects" />
+          <option value="SuperProject.SuperHeroes.models.SuperHeroes.objects" />
+          <option value="youtubeclone_api.comments.models.Comment.objects" />
+          <option value="FlashCards_API.flashcardsapp.views.FlashCardDetail.get_object" />
+          <option value="FlashCards_API.flashcardsapp.models.FlashCard.objects" />
+          <option value="FlashCards_API.flashcardsapp.models.FlashCard.DoesNotExist" />
+          <option value="trash_collector.employees.models.Employee.objects" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

@@ -10,3 +10,15 @@ class AnimeCreator(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class Comment(models.Model):
+    comment = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.comment
+
+
+class Rating(models.Model):
+    rating = models.IntegerField()
+
