@@ -22,3 +22,13 @@ class Comment(models.Model):
 class Rating(models.Model):
     rating = models.IntegerField()
 
+    def __str__(self):
+        return self.rating
+
+
+class Video(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
+
+    def __str__(self):
+        return self.name
