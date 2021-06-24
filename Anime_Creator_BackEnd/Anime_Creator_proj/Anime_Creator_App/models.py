@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import datetime
 
 # Create your models here.
 
@@ -35,3 +36,20 @@ class Rating(models.Model):
 
     def __str__(self):
         return self.rating
+
+
+class Friends(models.Model):
+    creator = models.ForeignKey(AnimeCreator, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.creator
+    
+
+class Message(models.Model):
+    message_time = models.DateTimeField(default=datetime.now, blank=True)
+    creator = models.ForeignKey(AnimeCreator, on_delete=models.CASCADE)
+    friend = models.ForeignKey(Friends, on_delete=models.CASCADE)
+    message = models.CharField(max_length=500)
+
+    def __str__(self):
+        return self.message
