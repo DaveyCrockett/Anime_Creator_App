@@ -12,8 +12,18 @@ class AnimeCreator(models.Model):
         return self.username
 
 
+class Video(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.CharField(max_length=300)
+    creator = models.ForeignKey(AnimeCreator, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
 class Comment(models.Model):
     comment = models.CharField(max_length=300)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.comment
@@ -21,14 +31,7 @@ class Comment(models.Model):
 
 class Rating(models.Model):
     rating = models.IntegerField()
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.rating
-
-
-class Video(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=300)
-
-    def __str__(self):
-        return self.name

@@ -1,21 +1,27 @@
 from rest_framework import serializers
-from .models import Comment, Rating, AnimeCreator
+from .models import Comment, Rating, AnimeCreator, Video
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ['comment']
+        fields = ['id', 'comment']
         
         
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
-        fields = ['rating']
+        fields = ['id', 'rating']
         
         
 class AnimeCreatorSerializer(serializers.ModelSerializer):
     class Meta:
         model = AnimeCreator
-        fields = ['username', 'password', 'email']
+        fields = ['id', 'username', 'password', 'email']
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Video
+        fields = ['id', 'name', 'description']
         
