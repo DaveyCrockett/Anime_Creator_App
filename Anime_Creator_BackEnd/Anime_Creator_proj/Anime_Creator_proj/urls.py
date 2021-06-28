@@ -16,9 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Anime_Creator_App/', include('Anime_Creator_App.urls')),
-    path('', RedirectView.as_view(url='/Anime_Creator_App/'))
+    path('', RedirectView.as_view(url='/Anime_Creator_App/')),
+    path('token-auth/', obtain_jwt_token)
 ]
