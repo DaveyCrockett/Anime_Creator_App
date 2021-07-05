@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -16,6 +17,7 @@ class AnimeCreator(models.Model):
 class Video(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=300)
+    video = models.FileField(upload_to='videos/')
     creator = models.ForeignKey(AnimeCreator, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -39,10 +41,11 @@ class Rating(models.Model):
 
 
 class Friends(models.Model):
-    creator = models.ForeignKey(AnimeCreator, null=True, on_delete=models.CASCADE)
+    username = models.CharField(max_length=100)
+    friend = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.creator
+        return self.friend
 
 
 class Message(models.Model):

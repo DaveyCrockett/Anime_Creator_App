@@ -6,6 +6,9 @@ from .serializer import CommentSerializer, RatingSerializer, AnimeCreatorSeriali
 from django.http import Http404
 from .serializer import UserSerializer, UserSerializerWithToken
 from rest_framework.decorators import api_view
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+
 
 # Create your views here.
 @api_view(['GET'])
@@ -53,6 +56,13 @@ class CommentView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class AnimeCreatorFriendsView(APIView):
+    def get(self, request):
+        creators = User.objects.all()
+        serializer = UserSerializer(creators, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class AnimeCreatorView(APIView):
 
     def get_object(self, pk):
@@ -80,7 +90,6 @@ class AnimeCreatorView(APIView):
 
 
 class RatingView(APIView):
-
 
     def post(self, request):
         serializer = RatingSerializer(data=request.data)
@@ -117,12 +126,23 @@ class RatingView(APIView):
 class VideoView(APIView):
 
     def post(self, request):
-        print(request.data)
-        serializer = VideoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.method == 'POST':
+            name = request.POST['name']
+            video = request.POST['video']
+            description = request.POST['description']
+            creator = request.POST['creator']
+            content = Video(name=name, video=video, description=description, creator=creator)
+            content.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        videos = Video.objects.all()
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class VideoViewDetail(APIView):
 
     def get_object(self, pk):
         try:
@@ -150,9 +170,8 @@ class FriendsView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, id):
-        creator = AnimeCreator.objects.get(pk=id)
-        friends = creator.friend_set.all()
+    def get(self, request):
+        friends = Friends.objects.all()
         serializer = FriendsSerializer(friends, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -195,5 +214,7 @@ class MessageView(APIView):
         friend = self.get_object(pk=id)
         friend.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
