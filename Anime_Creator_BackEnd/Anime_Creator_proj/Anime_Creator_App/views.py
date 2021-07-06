@@ -7,6 +7,9 @@ from django.http import Http404
 from .serializer import UserSerializer, UserSerializerWithToken
 from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
+from .forms import UploadedFileForm
+from .models import File
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 
 
@@ -127,13 +130,16 @@ class VideoView(APIView):
 
     def post(self, request):
         if request.method == 'POST':
-            name = request.POST['name']
-            video = request.POST['video']
-            description = request.POST['description']
-            creator = request.POST['creator']
-            content = Video(name=name, video=video, description=description, creator=creator)
-            content.save()
-            return Response(status=status.HTTP_201_CREATED)
+            MyNewForm = UploadedFileForm(request.POST, request.FILES)
+            if MyNewForm.is_valid():
+                video = File()
+                video.docfile = MyNewForm.cleaned_data['video']
+                name = request.POST['name']
+                video = request.FILES['video']
+                description = request.POST['description']
+                content = Video(name=name, video=video, description=description)
+                content.save()
+                return Response(status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
@@ -144,9 +150,9 @@ class VideoView(APIView):
 
 class VideoViewDetail(APIView):
 
-    def get_object(self, pk):
+    def get_object(self, name):
         try:
-            return Video.objects.get(pk=pk)
+            return Video.objects.get(name=name)
         except Video.DoesNotExist:
             raise Http404
 
@@ -155,8 +161,8 @@ class VideoViewDetail(APIView):
         video.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def get(self, request, id):
-        video = self.get_object(pk=id)
+    def get(self, request, name):
+        video = self.get_object(name=name)
         serializer = VideoSerializer(video)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
